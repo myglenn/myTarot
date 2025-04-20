@@ -1,0 +1,38 @@
+
+.env
+.env.*
+
+node_modules/
+
+dist/
+build/
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+Thumbs.db
+
+# vsCode
+.vscode/
+
+# test
+coverage/
+*.lcov
+
+# cache
+.cache/
+tmp/
+temp/
+
+# session
+*.swo
+
+# backup
+*.bak
+*.old
+
+# etc
+*.sqlite 
+*.pid

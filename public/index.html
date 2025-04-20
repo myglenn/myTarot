@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tarot App</title>
+</head>
+<body>
+  <h1>🎴 Welcome to My Tarot API 🎴</h1>
+  <p>아래 버튼을 클릭해 카드를 뽑아보세요!</p>
+  <button onclick="drawCard()">카드 뽑기</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function drawCard() {
+      const res = await fetch('/api/tarot/draw');
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
