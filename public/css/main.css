@@ -1,0 +1,135 @@
+:root {
+    font-size: 16px;
+    --bg: #fdfdfd;
+    --primary: #333;
+    --border: #ddd;
+    --header-height: 4rem;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--primary);
+    
+  }
+  
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: #444;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+    z-index: 1000;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  main {
+    padding: calc(var(--header-height) + 1rem) 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: var(--header-height); /* padding → margin 으로 변경! */
+    padding: 1.5rem;
+    
+  }
+
+  .container {
+    max-width: 1024px;
+    width: 100%;
+    margin: 0 auto; /* ✅ 중앙 정렬 */
+  }
+  
+  section {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: white;
+  }
+  
+  footer {
+    text-align: center;
+    padding: 1rem;
+    background: #eee;
+    color: #777;
+  }
+  
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+    gap: 1rem;
+  }
+  
+  .card {
+    aspect-ratio: 2 / 3;
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* 선택 시 부드럽게 강조 */
+  .card.selected {
+    background-color: #fff7e6;
+    border-color: #f0a500;
+    box-shadow: 0 0 8px rgba(240, 165, 0, 0.5);
+  }
+
+
+  /* 반응형 (모바일, 태블릿 세로) */
+  @media screen and (max-width: 767px) {
+    header {
+          display: flex;
+      flex-direction: row;
+
+      height: auto;
+      padding: 1rem;
+      
+    }
+
+    header > h1 {
+        width: calc(80%); /* 버튼 너비 + 여유값 빼기 */
+        overflow: hidden;
+        flex-grow: 1;
+    }
+
+    header > button {
+        margin-left: auto;
+        flex-shrink: 0;
+    } 
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(3.5rem, 1fr));
+      }
+  }
+  
+  /* PC */
+
+  @media screen and (min-width: 1025px) {
+    main {
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    section {
+      width: 100%;
+    }
+  }

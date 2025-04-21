@@ -14,6 +14,8 @@ app.use(express.json());
 const router = require('./routes/router');
 app.use('/api/tarot', router);
 
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

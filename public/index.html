@@ -1,21 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>My Tarot App</title>
-</head>
-<body>
-  <h1>🎴 Welcome to My Tarot API 🎴</h1>
-  <p>아래 버튼을 클릭해 카드를 뽑아보세요!</p>
-  <button onclick="drawCard()">카드 뽑기</button>
-  <pre id="result"></pre>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>타로앱 레이아웃</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="js/main.js"></script>
   <script>
-    async function drawCard() {
-      const res = await fetch('/api/tarot/draw');
-      const data = await res.json();
-      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    window.onload = function() {
+      let lastIdx = 0;
+      mkCard();
+      lastIdx = selectCard(1, lastIdx);
     }
   </script>
+</head>
+<body>
+  <header>
+    <h1 role="heading">타로 앱</h1>
+  </header>
+
+  <main>
+
+    <div class="container">
+      <section class="sec1">
+        <h2 id="sec1">섹션 1</h2>
+        <p>내용 1</p>
+      </section>
+      <section class="sec2">
+        <div class="card-grid" id="card_grid">
+
+          <!-- ... -->
+        </div>
+      </section>
+      <section aria-labelledby="sec3">
+        <h2 id="sec3">섹션 3</h2>
+        <p>내용 3</p>
+      </section>
+    </div>
+    
+  </main>
+
+  <footer>
+    <p>&copy; 2025 둥둥의 타로앱</p>
+  </footer>
+
+
 </body>
 </html>
