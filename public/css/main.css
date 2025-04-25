@@ -82,6 +82,7 @@ main {
   max-width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden;
+  
 }
 
 .container {
@@ -100,9 +101,21 @@ section {
   background: white;
 }
 
+
 .dark section {
   background: #2c2c2e;
 }
+
+.sec1 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sec1 > button {
+  align-self: flex-start;
+}
+
 
 footer {
   text-align: center;
@@ -120,6 +133,10 @@ footer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
   gap: 1rem;
+}
+
+#result-section, #card-area {
+  display: none;
 }
 
 .card {
@@ -170,15 +187,17 @@ footer {
 }
 
 .tarot-card-group {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  justify-items: center;
 }
 
 .tarot-card {
-  width: 100px;
-  height: 150px;
-  transform-origin: center center;
+  width: 25vw;
+  max-width: 100px;
+  aspect-ratio: 2 / 3;
+  border-radius: 0.5rem;
 }
 
 .card1 {
@@ -381,6 +400,13 @@ body:not(.dark) .card-bg {
   animation: popup 0.3s ease forwards;
 }
 
+.tarot-card-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
 @keyframes popup {
   0% {
     transform: scale(0.8);
@@ -413,7 +439,6 @@ body:not(.dark) .card-bg {
   header {
     display: flex;
     flex-direction: row;
-    height: auto;
     padding: 1rem;
   }
 
@@ -452,6 +477,19 @@ body:not(.dark) .card-bg {
     padding: 0.5rem 1rem;
   }
 
+}
+
+@media screen and (max-width: 480px) {
+  textarea.json-block {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  section {
+    padding: 1rem 0.75rem;
+  }
 }
 
 @media screen and (min-width: 1025px) {

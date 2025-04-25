@@ -9,5 +9,5 @@ def main():
     inputText = sys.argv[1]
     return wordninja.split(inputText)
 
-    if __name__ == "__main__":
-        main()
+if __name__ == "__main__":
+    result = main()
