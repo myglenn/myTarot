@@ -12,12 +12,15 @@ app.use(express.json());
 
 // 라우터
 const router = require('./routes/router');
-app.use('/api/tarot', router);
+
 
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+app.get('/api', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'api.html'));
 });
 
 sequelize.sync().then(() => {
