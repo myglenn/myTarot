@@ -1,10 +1,11 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const Card = require('../models/Cards');
-const CardMeaning = require('../models/CardMeaning');
+const CardMeaning = require('../models/CardMeanings');
 const TokenLogs = require('../models/TokenLogs');
 const { tokenChecker } = require('../utils/tokenChecker');
 const e = require('cors');
+
 
 exports.getRandomCard = async (...idxs) => {
   const cards = await Card.findAll();

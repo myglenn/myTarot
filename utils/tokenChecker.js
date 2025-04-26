@@ -25,4 +25,4 @@ function countTokens(text) {
   }
   
 
-  exports.countTokens = tokenCount;
+  exports.countTokens = countTokens;

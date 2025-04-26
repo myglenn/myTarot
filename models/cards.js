@@ -1,3 +1,6 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
+
 const Cards = sequelize.define('Cards', {
   id: {
     type: DataTypes.INTEGER.UNSIGNED,

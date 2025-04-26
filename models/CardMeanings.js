@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
-const TarotCard = require('./TarotCard');
+const TarotCard = require('../models/Cards');
 
 const CardMeanings = sequelize.define('CardMeanings', {
   id: {
@@ -25,7 +25,7 @@ const CardMeanings = sequelize.define('CardMeanings', {
   timestamps: false,
 });
 
-TarotCard.hasMany(CardMeaning, { foreignKey: 'card_id' });
-CardMeaning.belongsTo(TarotCard, { foreignKey: 'card_id' });
+TarotCard.hasMany(CardMeanings, { foreignKey: 'card_id' });
+CardMeanings.belongsTo(TarotCard, { foreignKey: 'card_id' });
 
 module.exports = CardMeanings;
