@@ -30,29 +30,35 @@ window.onload = function () {
     }
   }
 
+  async function onCardSelectionComplete(selectedCardIds) {
+    const question = questionInput.value.trim();
+    if (!question) {
+      Main.showAlert('질문을 입력해 주세요!');
+      return;
+    }
+  
+    showOnlySection(loadingView);
+  
+    setTimeout(async () => {
+      const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
+  
+      if (!success) {
+        Main.resetCards();
+        Main.setupCardSelection({
+          max: 3,
+          onComplete: onCardSelectionComplete,
+        });
+        showOnlySection(requestSection, true);
+        window.scrollTo(0, 0);
+      }
+    }, 400);
+  }
+
   // 3. Main 세팅
   Main.mkCard();
   Main.setupCardSelection({
-    max: 3,
-    onComplete: async (selectedCardIds) => {
-      const question = questionInput.value.trim();
-      if (!question) {
-        Main.showAlert('질문을 입력해 주세요!');
-        return;
-      }
-
-
-      showOnlySection(loadingView);
-
-      setTimeout(async () => {
-        const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
-      
-        if (!success) {
-          showOnlySection(requestSection, true);
-          window.scrollTo(0, 0);
-        }
-      }, 400);
-    },
+    max : 3,
+    onComplete: onCardSelectionComplete,
   });
   Main.applySystemTheme();
 
@@ -74,25 +80,8 @@ window.onload = function () {
       questionInput.value = "";
       Main.resetCards();
       Main.setupCardSelection({
-        max: 3,
-        onComplete: async (selectedCardIds) => {
-          const question = questionInput.value.trim();
-          if (!question) {
-            Main.showAlert('질문을 입력해 주세요!');
-            return;
-          }
-
-          showOnlySection(loadingView);
-
-          setTimeout(async () => {
-            const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
-          
-            if (!success) {
-              showOnlySection(requestSection, true);
-              window.scrollTo(0, 0);
-            }
-          }, 400);
-        },
+        max : 3,
+        onComplete: onCardSelectionComplete,
       });
       showOnlySection(requestSection, true);
       window.scrollTo(0, 0);

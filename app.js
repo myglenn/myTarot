@@ -52,6 +52,5 @@ sequelize.sync().then(() => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack); // 서버에서는 에러를 로그로 찍되
-  res.status(500).json({ message: '서버 내부 오류입니다.' }); // 클라이언트에는 깔끔하게 전달
+  res.status(500).json({ message: '서버 내부 오류입니다.' });
 });

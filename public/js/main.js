@@ -168,7 +168,7 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
 
     const result = await response.json();
 
-    await sleep(5000); // 또는 추가 로딩 시간
+    await sleep(3000); // 또는 추가 로딩 시간
 
     hideLoading();
     showResult(result);
@@ -185,26 +185,19 @@ function showResult(result) {
   if (resultSection) {
     resultSection.style.display = "block";
 
-    // 카드나 해석 내용 갱신하는 코드 추가 가능
-    // 예시로만 보여줄게
-    const tarotCards = document.querySelectorAll('.tarot-card');
-    // tarotCards.forEach((cardDiv, idx) => {
-    //   const img = document.createElement('img');
-    //   img.src = `/cards/${result.cards[idx]}.jpg`; // 가라 데이터라면 번호만 있다고 가정
-    //   img.alt = `Card ${idx}`;
-    //   img.width = 100;
-    //   cardDiv.innerHTML = ''; // 초기화
-    //   cardDiv.appendChild(img);
-    // });
-
     const summary = resultSection.querySelector('ul');
     if (summary) {
-      summary.innerHTML = `<li><strong>데이터 수신 완료</strong></li>`;
+        let cards = result.cards;
+        summary.innerHTML = '';
+        for(let i = 0; i < cards.length; i++) {
+          let card = cards[i];
+          summary.innerHTML += `<li><strong>`+ card.name_en + ` (` + card.direction + `)</strong> - ` + card.meaning  + `</li>`;
+        }
     }
 
     const fullReading = resultSection.querySelector('p');
     if (fullReading) {
-      fullReading.innerText = "가라 데이터 기반 리딩 결과입니다.";
+      fullReading.innerText = result.result;
     }
   }
 }

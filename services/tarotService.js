@@ -7,20 +7,25 @@ const { tokenChecker } = require('../utils/tokenChecker');
 
 
 exports.getRandomCard = async (...idxs) => {
-  const cards = await Card.findAll();
+  const cards = await Card.findAll({ raw: true });
   const limit = 77;
   let randomNums = [];
   let rtn = [];
 
-  if (cards.length <= 1 || idxs.length === 0 || idxs.length > 3) {
+  if (Array.isArray(idxs) && Array.isArray(idxs[0])) {
+    idxs = idxs[0];
+  }
+
+  if (cards.length <= 1 || idxs.length < 3 || idxs.length > 3) {
     return null;
   }
 
   for (let i = 0; i < idxs.length; i++) {
     let tmpNum = idxs[i];
-    if (!!isNaN(tmpNum) || tmpNum < 0 || tmpNum > limit) {
+    if (!!Number.isNaN(tmpNum) || tmpNum < 0 || tmpNum > limit) {
       return null;
     }
+
   }
 
   while (randomNums.length < 3) {
@@ -31,7 +36,7 @@ exports.getRandomCard = async (...idxs) => {
   }
 
   for (let i = 0; i < idxs.length; i++) {
-    let targetNum = randomNums[idxs[i]];
+    let targetNum = parseInt(idxs[i]);
     let card = cards.find(c => c.id === targetNum);
     if (!card) {
       return null;
@@ -44,7 +49,7 @@ exports.getRandomCard = async (...idxs) => {
       }
     });
     rtn.push({
-      ...card.dataValues,
+      ...card,
       direction: !!isFwd ? '정방향' : '역방향',
       meaning: meaningData ? meaningData.meaning : '해석을 찾을 수 없습니다'
     });
