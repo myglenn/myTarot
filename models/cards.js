@@ -1,21 +1,26 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-
-const Card = sequelize.define('Card', {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
+const Cards = sequelize.define('Cards', {
+  id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    primaryKey: true,
+    allowNull: false,
+    autoIncrement: false,
   },
-  meaning: {
-    type: DataTypes.TEXT,
-    allowNull: false
+  name_kr: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
   },
-  imageUrl: {
-    type: DataTypes.STRING,
-    allowNull: true
+  name_en: {
+    type: DataTypes.STRING(40),
+    allowNull: false,
+  },
+  img: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
   }
 }, {
-  timestamps: false
+  tableName: 'TAROT_CARDS',
+  timestamps: false,
 });
 
-module.exports = Card;
+
+module.exports = Cards;

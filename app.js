@@ -4,8 +4,6 @@ const app = express();
 const path = require('path');
 const sequelize = require('./config/db');
 
-// env 설정
-dotenv.config();
 
 // 미들웨어
 app.use(express.json());
