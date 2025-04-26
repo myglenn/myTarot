@@ -13,7 +13,8 @@ const cors = require('cors');
 const corsOptions = require('./config/corsConfig');
 const applyHelmet = require('./middlewares/helmet');
 const rateLimiter = require('./middlewares/rateLimiter');
-
+// 라우터
+const router = require('./routes/router');
 
 
 // 미들웨어
@@ -24,10 +25,9 @@ app.use(rateLimiter);
 app.use(express.json({ limit: '10kb' })); 
 app.use(xss());
 
-// 라우터
-const router = require('./routes/router');
 
 
+app.use('/', router);
 
 app.use(express.static(path.join(__dirname, "public")));
 

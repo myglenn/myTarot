@@ -6,78 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>타로앱 레이아웃</title>
   <link rel="stylesheet" href="css/main.css" />
-  <script src="js/main.js"></script>
-  <script>
-    window.onload = function () {
-      mkCard();
-      setupCardSelection({
-        max: 3,
-        onComplete: (selectedCardIds) => {
-          setTimeout(() => {
-            showOnlySection(document.getElementById("loadingView"));
-            setTimeout(() => {
-              hideLoading();
-              showOnlySection(document.getElementById("result-section"));
-              window.scrollTo(0, 0);
-            }, 1500);
-          }, 400);
-        },
-      });
-
-      applySystemTheme();
-
-      const requestSection = document.getElementById("input-area");
-      const selectSection = document.getElementById("card-area");
-      const resultSection = document.getElementById("result-section");
-      const loadingView = document.getElementById("loadingView");
-
-      const questionInput = document.getElementById("question-input");
-      const requestButton = document.getElementById("request-button");
-      const retryButton = document.getElementById("retry-button");
-
-      function showOnlySection(target, isFlex) {
-        [requestSection, selectSection, resultSection, loadingView].forEach(sec => {
-          if (sec) sec.style.display = "none";
-        });
-        if (target) target.style.display = "block";
-        if (!!isFlex) target.style.display = "flex";
-      }
-
-      requestButton.addEventListener("click", () => {
-        const question = questionInput.value.trim();
-        if (!question) {
-          showAlert("질문을 입력해 주세요!");
-          return;
-        }
-        resetCards();
-        showOnlySection(selectSection);
-      });
-
-      retryButton.addEventListener("click", () => {
-        questionInput.value = "";
-        resetCards();
-        setupCardSelection({
-          max: 3,
-          onComplete: (selectedCardIds) => {
-            setTimeout(() => {
-              showOnlySection(document.getElementById("loadingView"));
-              setTimeout(() => {
-                hideLoading();
-                showOnlySection(document.getElementById("result-section"));
-                window.scrollTo(0, 0);
-              }, 1500);
-            }, 400);
-          },
-        });
-        showOnlySection(requestSection, true);
-        window.scrollTo(0, 0);
-      });
-    };
-
-  </script>
+  <script src="js/main.js" type="module"></script>
+  <script src="js/indexPage.js" type="module"></script>
 </head>
 
 <body>
+
+  <!-- loading -->
+  <div id="loadingView">
+    <div id="loadingBackground"></div>
+      <div id="loadingContent">
+        <div class="tarot-loading">
+          <div class="tarot-card-group">
+            <svg class="tarot-card card1" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
+            </svg>
+            <svg class="tarot-card card2" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
+            </svg>
+            <svg class="tarot-card card3" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
+            </svg>
+          </div>
+          <p>운명을 해석 중입니다...</p>
+        </div>
+      </div>
+  </div>
+
+
   <header>
     <h1 role="heading">Tarot</h1>
     <button id="themeToggle" class="theme-toggle" aria-label="모드 전환">🌓</button>
@@ -92,7 +48,7 @@
         <h2>타로 리딩을 시작해보세요</h2>
         <p>아래에 고민이나 궁금한 점을 자유롭게 입력해 주세요.</p>
         <textarea class="json-block" id="question-input" rows="4" placeholder="예: ..."></textarea>
-        <button id="request-button">카드 뽑기</button>
+        <button id="request-button">카드 3장 뽑기</button>
       </section>
 
       <!-- 결과 섹션 -->
@@ -223,27 +179,12 @@
   </footer>
 
 
-  <!-- loading -->
-  <div id="loadingView" class="tarot-loading" style="display: none;">
-    <div class="tarot-card-group">
-      <svg class="tarot-card card1" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-      </svg>
-      <svg class="tarot-card card2" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-      </svg>
-      <svg class="tarot-card card3" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-      </svg>
-    </div>
-    <p>운명을 해석 중입니다...</p>
-  </div>
 
   <!-- customAlert -->
   <div id="customAlert" class="custom-alert" style="display: none;">
     <div class="alert-box">
       <p id="alertMessage">여기에 메시지가 들어갑니다</p>
-      <button onclick="closeAlert()">확인</button>
+      <button id="alert-close" >확인</button>
     </div>
   </div>
 

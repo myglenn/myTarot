@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const tarotService = require('../services/tarotService');
 
 // exports.drawCard = async (req, res) => {
@@ -16,19 +18,24 @@ exports.apiAct = async (req, res) => {
 
 
 exports.mainAct = async (req, res) => {
-  res.send('API 문서 페이지입니다!');
-};
-
-
-
-exports.api = async (req, res) => {
-  res.send('API 문서 페이지입니다!');
+  res.json({ message: "API 문서 페이지입니다!" });
 };
 
 exports.index = async (req, res) => {
   // const regex = /^[ㄱ-ㅎ가-힣a-zA-Z\d!?.]{1,100}$/;
 };
 
-exports.reading = async (req, res) => {
-  res.send('API 문서 페이지입니다!');
+exports.reading = async (req, res, next) => {
+  const allowIps = ['127.0.0.1', '::1', process.env.ALLOW_IP];
+  const userIp = req.ip || req.connection.remoteAddress;
+  const cleanedIp = userIp.replace('::ffff:', '');
+  if (!allowIps.includes(cleanedIp)) {
+    return res.status(403).json({ message: '허용되지 않은 접근입니다.' });
+  }
+
+  const reqBody = req.body;
+
+
+  // if(reqBody.question)
+  
 };

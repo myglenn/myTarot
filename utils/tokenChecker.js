@@ -8,7 +8,7 @@ function countTokens(text) {
   
       exec(command, (error, stdout, stderr) => {
         if (error) {
-          console.error('Python 실행 에러:', error);
+  
           return reject(error);
         }
   

@@ -109,7 +109,7 @@ section {
 .sec1 {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .sec1 > button {
@@ -171,21 +171,55 @@ footer {
 }
 
 
-.tarot-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  background: var(--bg);
-  border-radius: 16px;
-  color: var(--primary);
-  font-family: 'Georgia', serif;
-  text-align: center;
-  position: relative;
-  z-index: 10;
+#loadingView {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent; /* 흐림은 loadingBackground가 함 */
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
 }
 
+#loadingBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* 요걸 새로 추가 */
+#loadingContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* tarot-loading은 기존대로 */
+.tarot-loading {
+  width: auto;
+  max-width: 400px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.3);
+}
 .tarot-card-group {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));

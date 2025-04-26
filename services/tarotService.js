@@ -1,10 +1,9 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const Card = require('../models/Cards');
-const CardMeaning = require('../models/CardMeanings');
-const TokenLogs = require('../models/TokenLogs');
+const Card = require('../models/Card');
+const CardMeaning = require('../models/CardMeaning');
+const TokenLogs = require('../models/TokenLog');
 const { tokenChecker } = require('../utils/tokenChecker');
-const e = require('cors');
 
 
 exports.getRandomCard = async (...idxs) => {
@@ -37,7 +36,7 @@ exports.getRandomCard = async (...idxs) => {
     if (!card) {
       return null;
     }
-    let isFwd = Math.random() < 0.5 ;
+    let isFwd = Math.random() < 0.5;
     const meaningData = await CardMeaning.findOne({
       where: {
         card_id: card.id,
@@ -54,10 +53,27 @@ exports.getRandomCard = async (...idxs) => {
   return rtn;
 };
 
-exports.countTokens = async (messages) => {
-  const exitMsg = !!messages;
+exports.inputLog = async (tokenCount, tokenType) => {
+  if (!tokenCount || !tokenType || isNaN(tokenCount)) {
+    return;
+  }
+  const data = { create_at: new Date() };
+  if (tokenType === 'INPUT') {
+    data.rq_token = tokenCount;
+  } else {
+    if (tokenType === 'OUTPUT') {
+      data.rs_token = tokenCount;
+    } else {
+      return;
+    }
+  }
+  await TokenLogs.create(data);
+};
+
+exports.countTokens = async (messages, isInput) => {
+  const extMsg = !!messages;
   let chkToken = 0;
-  if (!!exitMsg) {
+  if (!!extMsg && !!isInput || !!extMsg) {
     chkToken = await tokenChecker(messages);
   }
   try {
