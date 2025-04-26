@@ -32,8 +32,21 @@ function selectCard(cnt, lastIdx) {
 }
 
 function applySystemTheme() {
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  document.body.classList.toggle('dark', prefersDark);
+  const savedTheme = localStorage.getItem('theme');
+  const html = document.documentElement;
+  const body = document.body;
+
+  if (savedTheme === 'dark') {
+    html.classList.add('dark');
+    body.classList.add('dark');
+  } else if (savedTheme === 'light') {
+    html.classList.remove('dark');
+    body.classList.remove('dark');
+  } else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    html.classList.toggle('dark', prefersDark);
+    body.classList.toggle('dark', prefersDark);
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -49,13 +62,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const toggleBtn = document.getElementById('themeToggle');
 
-  const savedTheme = localStorage.getItem('theme');
-
-
   toggleBtn?.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-  });
+    const html = document.documentElement;
+    const body = document.body;
 
+    html.classList.toggle('dark');
+    body.classList.toggle('dark');
+
+    const isDark = html.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
 });
 
 function showAlert(message) {
@@ -136,35 +152,34 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function beforeRunReadingApi(qusetion, ...cardIdxs) {
+async function beforeRunReadingApi(question, ...cardIdxs) {
   try {
     showLoading();
-
-    
 
     const response = await fetch('/main/act', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ qusetion, cards: cardIdxs }),
+      body: JSON.stringify({ question, cards: cardIdxs }),
     });
-    
+
     if (!response.ok) {
       throw new Error('서버에서 오류 상태를 반환했습니다');
     }
-    
-    await sleep(5000);
-    
+
     const result = await response.json();
-    
+
+    await sleep(5000); // 또는 추가 로딩 시간
+
     hideLoading();
     showResult(result);
+
+    return true; // 성공했다는 표시
   } catch (error) {
     hideLoading();
     showAlert('문제가 발생했어요. 다시 시도해 주세요.');
-
+    return false; // 실패했다는 표시
   }
 }
-
 function showResult(result) {
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
@@ -182,12 +197,12 @@ function showResult(result) {
     //   cardDiv.appendChild(img);
     // });
 
-    const summary = document.querySelector('ul');
+    const summary = resultSection.querySelector('ul');
     if (summary) {
       summary.innerHTML = `<li><strong>데이터 수신 완료</strong></li>`;
     }
 
-    const fullReading = document.querySelector('p');
+    const fullReading = resultSection.querySelector('p');
     if (fullReading) {
       fullReading.innerText = "가라 데이터 기반 리딩 결과입니다.";
     }
@@ -198,7 +213,7 @@ async function readingApi(taroApiKey, question, selectedCards) {
   const response = await fetch('/api/reading', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({taroApiKey, question, cards: selectedCards }),
+    body: JSON.stringify({ taroApiKey, question, cards: selectedCards }),
   });
 
   return await response.json();

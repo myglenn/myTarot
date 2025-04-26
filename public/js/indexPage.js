@@ -41,17 +41,14 @@ window.onload = function () {
         return;
       }
 
-  
 
       showOnlySection(loadingView);
 
       setTimeout(async () => {
-        try {
-    
-          await Main.beforeRunReadingApi(question, ...selectedCardIds);
-        } catch (error) {
+        const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
+      
+        if (!success) {
           showOnlySection(requestSection, true);
-          Main.showAlert('문제가 발생했어요. 다시 입력해 주세요!');
           window.scrollTo(0, 0);
         }
       }, 400);
@@ -88,12 +85,10 @@ window.onload = function () {
           showOnlySection(loadingView);
 
           setTimeout(async () => {
-            try {
-              await Main.beforeRunReadingApi(question, ...selectedCardIds);
-            } catch (error) {
-  
+            const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
+          
+            if (!success) {
               showOnlySection(requestSection, true);
-              Main.showAlert('문제가 발생했어요. 다시 입력해 주세요!');
               window.scrollTo(0, 0);
             }
           }, 400);
