@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tarot AI - 프로젝트 소개</title>
+  <title>TAROT AI - 프로젝트 소개</title>
   <link rel="stylesheet" href="css/main.css" />
   <script src="js/main.js" type="module"></script>
 </head>
@@ -27,6 +27,14 @@
       </section>
 
       <section>
+        <h2>🃏 사용 카드 덱</h2>
+        <ul>
+          <li>본 프로젝트는 Rider–Waite–Smith Tarot 덱(public)을 참고하여 카드 구조 및 의미를 기반으로 리딩을 제공합니다.</li>
+          <li>1909년에 최초 출간된 Rider–Waite–Smith Tarot 덱은 현대 타로 리딩의 표준 이미지를 확립한 가장 널리 사용되는 대표적인 덱입니다.</li>
+        </ul>
+      </section>
+
+      <section>
         <h2>🙋 내 역할</h2>
         <ul>
           <li>전체 기획 및 개발 (1인 개발)</li>
@@ -36,13 +44,13 @@
       </section>
 
       <section>
-        <h2>🛠️ 사용 기술</h2>
+        <h2>🛠️ 기술 스택 및 환경</h2>
         <ul>
           <li>Frontend: HTML5, CSS3, JavaScript (Vanilla)</li>
           <li>Backend: Node.js (Express)</li>
           <li>Database: MariaDB</li>
           <li>Web Server: Nginx (Reverse Proxy)</li>
-          <li>Hosting: Cafe24(main), GitHub Pages(docs)</li>
+          <li>Hosting: Cafe24 (main), GitHub Pages (docs)</li>
         </ul>
       </section>
 
@@ -76,8 +84,7 @@ POST /api/reading
 
       <section>
         <h2>🔥 어려웠던 점 & 해결 방법</h2>
-        <p>다크모드 적용 및 사용자 시스템 설정 감지에 어려움을 겪었으나,  
-        'prefers-color-scheme' 미디어쿼리와 LocalStorage를 조합하여 문제를 해결했습니다.</p>
+        <p>SSH 인증서를 처음 설정하는 중 PEM 파일을 생성(cat)하여 하나의 인증서로 만들어서 연결하는 도중 PEM 파일의 `-----BEGIN PRIVATE KEY-----`와 `-----END PRIVATE KEY-----` 구문이 한 줄로 붙어버리는 문제로 인증하는데 어려움을 겪었습니다. 파일을 열어보기 전 까지 왜 안되지 순서가 잘못됐나 했었지만, 결국 이러한 현상을 발견하면서 그 두 구문을 개행처리 시킴으로 정상적으로 SSH 설정을 마무리할 수 있었습니다.</p>
       </section>
 
       <section>
@@ -101,7 +108,7 @@ POST /api/reading
   </main>
 
   <footer>
-    <p>&copy; myGlenn : Sungmin G</p>
+    <p>&copy; myglenn : Sungmin G</p>
   </footer>
 
 </body>

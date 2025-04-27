@@ -1,3 +1,4 @@
+-- 타로 카드 정보
 CREATE TABLE TAROT_CARDS (
   ID INT UNSIGNED PRIMARY KEY,
   NAME_KR VARCHAR(20) NOT NULL,
@@ -5,6 +6,7 @@ CREATE TABLE TAROT_CARDS (
   IMG VARCHAR(50) NOT NULL
 );
 
+-- 타로 카드 상세 정보 (정방향, 역방향, 각 의미)
 CREATE TABLE CARD_MEANINGS (
   ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   CARD_ID INT UNSIGNED NOT NULL,
@@ -15,10 +17,10 @@ CREATE TABLE CARD_MEANINGS (
 
 CREATE INDEX idx_NAME_EN ON TAROT_CARDS(NAME_EN);
 
-
+-- 타로 테이터베이스 캐릭터셋 변경
 ALTER DATABASE TAROT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-
+-- 타로 카드 기본 정보
 INSERT into `TAROT_CARDS` (`ID`,`NAME_KR`,`NAME_EN`,`IMG`) VALUES
 (1,'광대','The Fool','The_Fool.png'),
 (2,'마법사','The Magician','The_Magician.png'),
@@ -100,7 +102,7 @@ INSERT into `TAROT_CARDS` (`ID`,`NAME_KR`,`NAME_EN`,`IMG`) VALUES
 (78,'펜타클 왕','King of Pentacles','King_of_Pentacles.png');
 
 
-
+-- 시퀀스 테이블
 CREATE TABLE MONTH_SEQ (
     K CHAR(6) PRIMARY KEY,
     V BIGINT NOT NULL
@@ -108,7 +110,7 @@ CREATE TABLE MONTH_SEQ (
 
 
 
---  make SEQ
+--  SEQ 생성 프로시저
 DELIMITER $$
 
 CREATE PROCEDURE MK_SEQ(
@@ -137,7 +139,7 @@ END$$
 DELIMITER ;
 
 
-
+-- 토큰 로그 테이블
 CREATE TABLE TOKEN_LOGS (
     C_ID VARCHAR(20) DEFAULT NULL,
     RQ_TOKEN INT NOT NULL,
@@ -147,7 +149,7 @@ CREATE TABLE TOKEN_LOGS (
 ) ENGINE=InnoDB;
 
 
--- insert LOG SEQ trigger
+-- 로그 SEQ 트리거
 DELIMITER $$
 
 CREATE TRIGGER BEFORE_INST_TOKEN_LOG_ID
