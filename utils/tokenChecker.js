@@ -1,7 +1,7 @@
 const { execFile } = require('child_process');
 const path = require('path');
 
-const countTokens = (text) => {
+const tokenChecker = (text) => {
   return new Promise((resolve, reject) => {
     const scriptPath = path.join(__dirname, '../pythonUtils/tokenCounter.py');
     execFile('python', [scriptPath, text], (error, stdout, stderr) => {
@@ -19,4 +19,4 @@ const countTokens = (text) => {
   });
 };
 
-exports.countTokens = countTokens;
+exports.tokenChecker = tokenChecker;

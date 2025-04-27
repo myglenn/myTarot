@@ -4,6 +4,7 @@ const Card = require('../models/Card');
 const CardMeaning = require('../models/CardMeaning');
 const TokenLogs = require('../models/TokenLog');
 const { tokenChecker } = require('../utils/tokenChecker');
+const { Op } = require('sequelize');
 
 
 exports.getRandomCard = async (...idxs) => {
@@ -62,8 +63,14 @@ exports.inputLog = async (messages, tokenType) => {
   if (!messages||!tokenType) {
     return;
   }
-  const token = await tokenChecker(messages);
-  const data = { create_at: new Date() };
+  const messageString = typeof messages === 'string' ? messages : JSON.stringify(messages);
+
+  const token = await tokenChecker(messageString);
+  const data = { 
+    create_at: new Date(),
+    rq_token: 0,
+    rs_token: 0
+   };
   if (tokenType === 'INPUT') {
     data.rq_token = token;
   } else {
@@ -80,8 +87,10 @@ exports.countTokens = async (messages, isInput) => {
   const extMsg = !!messages;
   let chkToken = 0;
 
+  const messageString = typeof messages === 'string' ? messages : JSON.stringify(messages);
+
   if ((extMsg && isInput) || extMsg) {
-    chkToken = await tokenChecker(messages);
+    chkToken = await tokenChecker(messageString);
   }
 
   try {
