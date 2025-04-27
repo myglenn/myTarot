@@ -13,6 +13,13 @@ const cors = require('cors');
 const corsOptions = require('./config/corsConfig');
 const applyHelmet = require('./middlewares/helmet');
 const rateLimiter = require('./middlewares/rateLimiter');
+
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline'");
+  next();
+});
+
+
 // 라우터
 const router = require('./routes/router');
 
@@ -51,6 +58,8 @@ sequelize.sync().then(() => {
   console.error('❌ DB 연결 실패:', err);
 });
 
+
 app.use((err, req, res, next) => {
+  console.error(err.stack);
   res.status(500).json({ message: '서버 내부 오류입니다.' });
 });

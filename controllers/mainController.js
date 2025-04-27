@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const tarotService = require('../services/tarotService');
 const axios = require('axios');
+const { spawn } = require('child_process');
 
 
 exports.apiAct = async (req, res) => {
@@ -11,8 +12,6 @@ exports.apiAct = async (req, res) => {
 
 exports.mainAct = async (req, res) => {
   const { question, cards } = req.body;
-
-
 
   for (let i = 0; i < cards.length; i++) {
     cards[i] = cards[i].split('_').pop();
@@ -35,7 +34,6 @@ exports.reading = async (req, res, next) => {
   const allowIps = ['127.0.0.1', '::1', process.env.ALLOW_IP];
   const userIp = req.ip || req.connection.remoteAddress;
   const cleanedIp = userIp.replace('::ffff:', '');
-  const regex = /^[ㄱ-ㅎ가-힣a-zA-Z\d!?.~\s\n]{1,100}$/;
 
   if (!allowIps.includes(cleanedIp)) {
     return res.status(403).json({ message: '허용되지 않은 접근입니다.' });
@@ -44,11 +42,39 @@ exports.reading = async (req, res, next) => {
   if (!question || !cards || !tarotApiKey) {
     return res.status(403).json({ message: '허용되지 않은 접근입니다.' });
   }
-  if (!regex.test(question)) {
-    return res.status(400).json({ message: "질문 형식이 올바르지 않습니다. 한글, 영문, 숫자, 띄어쓰기, 개행, !?. 만 허용됩니다." });
-  }
   if (tarotApiKey !== process.env.TAROT_API_KEY) {
     return res.status(403).json({ message: '허용되지 않은 접근입니다.' });
+  }
+  const regex = /^[ㄱ-ㅎ가-힣a-zA-Z\d!?.~\s\n]{6,100}$/;
+  if (!regex.test(question)) {
+    return res.status(400).json({ message: "질문 형식이 올바르지 않습니다. 한글, 영문, 숫자, 띄어쓰기, 개행, !?.~ 만 허용됩니다. 글자수는 6개에서 100개 사이입니다." });
+  }
+
+
+  const englishWordCount = await new Promise((resolve, reject) => {
+    const pythonProcess = spawn('python', ['pythonUtils/wordSplitter.py', question]);
+
+    let result = '';
+    let error = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      result += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve(Number(result.trim()));
+      } else {
+        reject(new Error(`Python process error: ${error}`));
+      }
+    });
+  });
+  if (englishWordCount > 3) {
+    return res.status(400).json({ message: "질문에 영어 단어가 너무 많습니다. 한글 위주의 질문만 가능합니다." });
   }
 
 
@@ -86,6 +112,12 @@ exports.reading = async (req, res, next) => {
     messages: [systemMessage, userMessage]
   };
 
+  const tokenCount = await tarotService.countTokens(prompt.messages);
+
+  if (process.env.INPUT_LIMIT_TOKEN <= tokenCount) {
+    return res.status(403).json({ message: '월 사용량 초과로 API 사용을 중단합니다.' });
+  }
+
 
   try {
     const response = await axios.post(
@@ -99,6 +131,9 @@ exports.reading = async (req, res, next) => {
       }
     );
 
+    // 메시지는 db에 저장하지 않고 토큰 계산에만 쓰임
+    await tarotService.inputLog(prompt.messages, 'INPUT');
+
     const resultMsg = response.data.choices[0].message.content;
 
 
@@ -107,6 +142,8 @@ exports.reading = async (req, res, next) => {
       result: resultMsg
     }
 
+    // 메시지는 db에 저장하지 않고 토큰 계산에만 쓰임
+    await tarotService.inputLog(response.data.choices[0].message, 'OUTPUT');
     if (result.result === '해석할 수 없습니다.') {
       return res.status(400).json({ message: result.result });
     }

@@ -2,11 +2,16 @@ import sys
 import tiktoken
 
 def main():
-    model = "gpt-3.5-turbo"
+    if len(sys.argv) < 2:
+        return 0
+
+    model = "gpt-4"
     enc = tiktoken.encoding_for_model(model)
     input_text = sys.argv[1]
     tokens = enc.encode(input_text)
-    print(len(tokens))
+
+    return len(tokens)
 
 if __name__ == "__main__":
-    main()
+    result = main()
+    print(result)

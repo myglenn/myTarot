@@ -58,16 +58,17 @@ exports.getRandomCard = async (...idxs) => {
   return rtn;
 };
 
-exports.inputLog = async (tokenCount, tokenType) => {
-  if (!tokenCount || !tokenType || isNaN(tokenCount)) {
+exports.inputLog = async (messages, tokenType) => {
+  if (!messages||!tokenType) {
     return;
   }
+  const token = await tokenChecker(messages);
   const data = { create_at: new Date() };
   if (tokenType === 'INPUT') {
-    data.rq_token = tokenCount;
+    data.rq_token = token;
   } else {
     if (tokenType === 'OUTPUT') {
-      data.rs_token = tokenCount;
+      data.rs_token = token;
     } else {
       return;
     }
@@ -78,11 +79,12 @@ exports.inputLog = async (tokenCount, tokenType) => {
 exports.countTokens = async (messages, isInput) => {
   const extMsg = !!messages;
   let chkToken = 0;
-  if (!!extMsg && !!isInput || !!extMsg) {
+
+  if ((extMsg && isInput) || extMsg) {
     chkToken = await tokenChecker(messages);
   }
-  try {
 
+  try {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -94,11 +96,8 @@ exports.countTokens = async (messages, isInput) => {
           [Op.like]: `${targetMonth}%`
         }
       }
-    });
+    }) || 0;
 
-    if (!totalInputTokens || totalInputTokens == null) {
-      totalInputTokens = 0;
-    }
     return totalInputTokens + chkToken;
   } catch (error) {
     throw error;

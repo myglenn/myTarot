@@ -178,20 +178,46 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
     return false; // 실패했다는 표시
   }
 }
+
+function delImgs() {
+  const imgContainer = document.querySelectorAll('#result-section div.tarot-card img');
+  imgContainer.forEach(cardImg => {
+    cardImg.remove();
+  });
+
+}
+
+
 function showResult(result) {
   const resultSection = document.getElementById("result-section");
   if (resultSection) {
     resultSection.style.display = "block";
 
     const summary = resultSection.querySelector('ul');
+    const imgContainer = document.querySelectorAll('#result-section div.tarot-card');
+    let cards = result.cards;
     if (summary) {
-        let cards = result.cards;
-        summary.innerHTML = '';
-        for(let i = 0; i < cards.length; i++) {
-          let card = cards[i];
-          summary.innerHTML += `<li><strong>`+ card.name_en + ` (` + card.direction + `)</strong> - ` + card.meaning  + `</li>`;
-        }
+      summary.innerHTML = '';
+      for (let i = 0; i < cards.length; i++) {
+        let card = cards[i];
+        summary.innerHTML += `<li><strong>` + card.name_en + ` (` + card.direction + `)</strong> - ` + card.meaning + `</li>`;
+      }
     }
+
+    imgContainer.forEach((tmp, j) => {
+      const img = document.createElement('img');
+      img.src = '/images/' + cards[j].img;
+
+      img.classList.add('card');
+      
+      if (cards[j].direction === '역방향') {
+        img.classList.add('reversed');
+      }
+      
+      if (tmp) {
+        tmp.appendChild(img);
+      }
+    });
 
     const fullReading = resultSection.querySelector('p');
     if (fullReading) {
@@ -229,5 +255,6 @@ export default {
   hideLoading,
   setupCardSelection,
   resetCards,
-  readingApi
+  readingApi,
+  delImgs
 };

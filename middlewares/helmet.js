@@ -1,5 +1,9 @@
 const helmet = require('helmet');
 
-const applyHelmet = () => helmet(); 
+function applyHelmet() {
+  return helmet({
+    contentSecurityPolicy: false
+  });
+}
 
 module.exports = applyHelmet;

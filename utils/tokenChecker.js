@@ -1,28 +1,22 @@
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 const path = require('path');
 
-function countTokens(text) {
-    return new Promise((resolve, reject) => {
-      const scriptPath = path.join(__dirname, '../pythonUtils/tokenCounter.py');
-      const command = `python3 "${scriptPath}" "${text}"`;
-  
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-  
-          return reject(error);
+const countTokens = (text) => {
+  return new Promise((resolve, reject) => {
+    const scriptPath = path.join(__dirname, '../pythonUtils/tokenCounter.py');
+    execFile('python', [scriptPath, text], (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        const count = parseInt(stdout.trim(), 10);
+        if (isNaN(count)) {
+          reject(new Error('토큰 수 계산 실패: 결과가 숫자가 아님'));
+        } else {
+          resolve(count);
         }
-  
-        const result = stdout.trim();
-        const tokenCount = parseInt(result, 10);
-  
-        if (isNaN(tokenCount)) {
-          return reject(new Error('토큰 수 계산 실패: 결과가 숫자가 아님'));
-        }
-  
-        resolve(tokenCount);
-      });
+      }
     });
-  }
-  
+  });
+};
 
-  exports.countTokens = countTokens;
+exports.countTokens = countTokens;
