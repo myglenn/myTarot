@@ -175,3 +175,5 @@ END$$
 DELIMITER ;
 
 SHOW TRIGGERS;
+
+SELECT @@global.time_zone, @@session.time_zone;
