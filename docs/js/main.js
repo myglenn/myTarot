@@ -166,7 +166,7 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
 
     const result = await response.json();
 
-    await sleep(3000); // 또는 추가 로딩 시간
+    await sleep(1300); // 또는 추가 로딩 시간
 
     hideLoading();
     showResult(result);
