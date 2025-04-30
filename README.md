@@ -32,9 +32,5 @@ The server generates an AI-based reading and returns the results, which are then
 This project is licensed under the MIT License.  
 You are free to use, modify, and distribute this project with proper attribution.
 
-## Deployment
-- [Main Page](https://yourgithub.io/tarot-app/)
-- [Documentation](https://yourgithub.io/tarot-app/docs.html)
-
 ## Reference
 - Based on the Rider–Waite–Smith Tarot Deck (Public).
