@@ -74,8 +74,8 @@ function showLoading(message) {
     loader.style.opacity = '1';
     loader.style.visibility = 'visible';
     loader.style.pointerEvents = 'auto';
-    document.body.style.overflow = 'hidden'; // 스크롤 잠금
-    let contentArea = loader.getElementById('contentMsg');
+    document.body.style.overflow = 'hidden';
+    let contentArea = document.getElementById('contentMsg');
     contentArea.innerText = !!message ? message : '카드 해석 중입니다..';
   }
 }
