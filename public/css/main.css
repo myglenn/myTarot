@@ -664,6 +664,10 @@ body:not(.dark) .card-bg {
 
 @media screen and (max-width: 480px) {
 
+  .wide-btn {
+    width: 100%;
+  }
+
   main {
     padding: calc(var(--header-height) + 0.5rem) 1rem 1.5rem;
   }
