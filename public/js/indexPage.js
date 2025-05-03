@@ -10,6 +10,7 @@ window.onload = function () {
   const requestButton = document.getElementById("request-button");
   const retryButton = document.getElementById("retry-button");
   const alertClose = document.getElementById('alert-close');
+  const categoryInput = document.getElementById("category");
 
   function showOnlySection(target, isFlex) {
     if (!target) {
@@ -37,7 +38,7 @@ window.onload = function () {
     showOnlySection(loadingView);
 
     setTimeout(async () => {
-      const success = await Main.beforeRunReadingApi(question, ...selectedCardIds);
+      const success = !!categoryInput ? await Main.beforeRunReadingApiWithCategory(question, categoryInput, ...selectedCardIds) : await Main.beforeRunReadingApi(question, ...selectedCardIds);
       if (!success) {
         Main.resetCards();
         Main.setupCardSelection({

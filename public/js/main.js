@@ -150,32 +150,33 @@ function sleep(ms) {
 }
 
 async function beforeRunReadingApi(question, ...cardIdxs) {
+  return beforeRunReadingApiWithCategory(question, null, ...cardIdxs);
+}
+
+async function beforeRunReadingApiWithCategory(question, categoryStr, ...cardIdxs) {
   try {
     showLoading();
+
+    let data = { question, cards: cardIdxs };
+
+    if (!!categoryStr) {
+      data.category = categoryStr;
+    }
 
     const response = await fetch('/main/act', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, cards: cardIdxs }),
+      body: JSON.stringify(data),
     });
-
     const result = await response.json();
-
     if (!response.ok) {
       showAlert(result.message);
       return false;
     }
-
-
-
     await sleep(1300);
-
-    hideLoading();
     showResult(result);
-
     return true;
   } catch (error) {
-    hideLoading();
     showAlert('문제가 발생했어요. 다시 시도해 주세요.');
     return false;
   } finally {
@@ -386,5 +387,6 @@ export default {
   delImgs,
   shuffleCardsAnimation,
   applyCardLayout,
-  setupCardClickEffect
+  setupCardClickEffect,
+  beforeRunReadingApiWithCategory
 };
