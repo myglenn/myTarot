@@ -159,11 +159,14 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
       body: JSON.stringify({ question, cards: cardIdxs }),
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error('서버에서 오류 상태를 반환했습니다');
+      showAlert(result.message);
+      return false;
     }
 
-    const result = await response.json();
+
 
     await sleep(1300);
 
@@ -175,6 +178,8 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
     hideLoading();
     showAlert('문제가 발생했어요. 다시 시도해 주세요.');
     return false;
+  } finally {
+    hideLoading();
   }
 }
 

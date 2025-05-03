@@ -25,7 +25,18 @@ exports.mainAct = async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ message: '내부 요청 실패' });
+
+    if (!!error.response) {
+      const status = error.response.status;
+      const message = error.response.data?.message || '내부 요청 실패';
+      if (status >= 400 && status < 500) {
+        res.status(status).json({ message: message });
+      } else {
+        res.status(500).json({ message: '내부 요청 실패' });
+      }
+    } else {
+      res.status(500).json({ message: '내부 요청 실패' });
+    }
   }
 
 };
@@ -157,7 +168,7 @@ exports.reading = async (req, res, next) => {
     res.json(result);
 
   } catch (error) {
-    throw error;
+    return res.status(500).json({ message: '내부 오류입니다.' });
   }
 
 };
