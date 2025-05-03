@@ -139,10 +139,6 @@ section {
 }
 
 
-.dark section {
-  background: #2c2c2e;
-}
-
 .sec1 {
   display: flex;
   flex-direction: column;
@@ -157,14 +153,10 @@ section {
 footer {
   text-align: center;
   padding: 1rem;
-  background: #eee;
-  color: #777;
+  background: var(--bg);
+  color: var(--primary);
 }
 
-.dark footer {
-  background: #1e1e1f;
-  color: #aaa;
-}
 
 .card-grid {
   display: grid;
@@ -199,7 +191,6 @@ button,
 .card {
   width: clamp(60px, 18vw, 90px);
   aspect-ratio: 2 / 3;
-  background: linear-gradient(145deg, #d9d9d9, #f0f0f0);
   border-radius: 0.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
