@@ -29,6 +29,7 @@ function selectCard(cnt, lastIdx) {
           sCnt++;
         }
       }
+      console.log('sCnt ' + sCnt);
       if (sCnt > cnt) {
         return;
       }
@@ -37,23 +38,6 @@ function selectCard(cnt, lastIdx) {
   });
 }
 
-function applySystemTheme() {
-  const savedTheme = localStorage.getItem('theme');
-  const html = document.documentElement;
-  const body = document.body;
-
-  if (savedTheme === 'dark') {
-    html.classList.add('dark');
-    body.classList.add('dark');
-  } else if (savedTheme === 'light') {
-    html.classList.remove('dark');
-    body.classList.remove('dark');
-  } else {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    html.classList.toggle('dark', prefersDark);
-    body.classList.toggle('dark', prefersDark);
-  }
-}
 
 window.addEventListener('DOMContentLoaded', () => {
   const starsContainer = document.querySelector('.stars');
@@ -65,19 +49,6 @@ window.addEventListener('DOMContentLoaded', () => {
     star.style.animationDuration = `${1.5 + Math.random()}s`;
     starsContainer.appendChild(star);
   }
-
-  const toggleBtn = document.getElementById('themeToggle');
-
-  toggleBtn?.addEventListener('click', () => {
-    const html = document.documentElement;
-    const body = document.body;
-
-    html.classList.toggle('dark');
-    body.classList.toggle('dark');
-
-    const isDark = html.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  });
 });
 
 function showAlert(message) {
@@ -96,13 +67,16 @@ function closeAlert() {
 }
 
 
-
-function showLoading() {
+function showLoading(message) {
   const loader = document.getElementById('loadingView');
   if (loader) {
+    loader.style.display = 'flex';
     loader.style.opacity = '1';
-    loader.style.pointerEvents = 'auto';
     loader.style.visibility = 'visible';
+    loader.style.pointerEvents = 'auto';
+    document.body.style.overflow = 'hidden'; // 스크롤 잠금
+    let contentArea = loader.getElementById('contentMsg');
+    contentArea.innerText = !!message ? message : '카드 해석 중입니다..';
   }
 }
 
@@ -112,8 +86,13 @@ function hideLoading() {
     loader.style.opacity = '0';
     loader.style.pointerEvents = 'none';
     loader.style.visibility = 'hidden';
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 400);
+    document.body.style.overflow = '';
   }
 }
+
 
 let selectedCards = new Set();
 
@@ -321,24 +300,40 @@ function applyCardLayout() {
 
 function shuffleCardsAnimation() {
   const cards = document.querySelectorAll(".card");
-  cards.forEach((card, i) => {
-    const angle = Math.random() * 30 - 15;
-    const offsetX = (Math.random() * 2.5 - 1) + "rem";
-    const offsetY = (Math.random() * 1.25 - 0.625) + "rem";
+  const cardArea = document.querySelector("#card_grid");
 
-    card.style.transition = "transform 0.4s ease, opacity 0.4s ease";
-    card.style.transform = `translate(${offsetX}, ${offsetY}) rotate(${angle}deg)`;
-    card.style.opacity = "0.6";
+  showLoading('카드를 섞는 중입니다...');
 
+  cardArea.classList.add("hidden");
+
+  requestAnimationFrame(() => {
     setTimeout(() => {
-      card.style.opacity = "1";
-    }, 400 + i * 10);
-  });
+      cards.forEach((card, i) => {
+        card.style.position = "absolute";
+        card.style.left = "0";
+        card.style.top = "0";
 
-  setTimeout(() => {
-    applyCardLayout();
-    window.scrollTo(0, 0);
-  }, 1000);
+        const angle = Math.random() * 30 - 15;
+        const offsetX = (Math.random() * 2.5 - 1) + "rem";
+        const offsetY = (Math.random() * 1.25 - 0.625) + "rem";
+
+        card.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+        card.style.transform = `translate(${offsetX}, ${offsetY}) rotate(${angle}deg)`;
+        card.style.opacity = "0.6";
+
+        setTimeout(() => {
+          card.style.opacity = "1";
+        }, 400 + i * 10);
+      });
+
+      setTimeout(() => {
+        cardArea.classList.remove("hidden");
+        applyCardLayout();
+        hideLoading();
+        window.scrollTo(0, 0);
+      }, 1000);
+    }, 50);
+  });
 }
 
 
@@ -376,7 +371,6 @@ export default {
   beforeRunReadingApi,
   mkCard,
   selectCard,
-  applySystemTheme,
   showAlert,
   closeAlert,
   showLoading,
