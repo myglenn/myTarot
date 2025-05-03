@@ -5,10 +5,18 @@ function mkCard() {
     const div = document.createElement('div');
     div.className = 'card';
     div.id = 'card_' + i;
+
+    div.style.opacity = '0';
+    div.style.transform = 'scale(0.8)';
+    div.style.transition = 'all 0.3s ease';
+    setTimeout(() => {
+      div.style.opacity = '1';
+      div.style.transform = 'scale(1)';
+    }, i * 15);
+
     grid.appendChild(div);
   }
 }
-
 function selectCard(cnt, lastIdx) {
   const cards = document.querySelectorAll(".card");
   let rtn;
@@ -114,24 +122,36 @@ function setupCardSelection({ max = 3, onComplete }) {
   selectedCards.clear();
 
   cards.forEach((card) => {
-    if (card.dataset.bound === "true") return;
+    if (card.dataset.bound === "true") {
+      return;
+    }
     card.dataset.bound = "true";
 
     card.addEventListener("click", () => {
       const cardId = card.id;
-      if (!cardId) return;
+      if (!cardId) {
+        return;
+      }
 
       if (selectedCards.has(cardId)) {
         card.classList.remove("selected");
         selectedCards.delete(cardId);
-        return;
+      } else {
+        if (selectedCards.size >= max) { return; }
+
+        card.classList.add("selected");
+        selectedCards.add(cardId);
       }
 
-      if (selectedCards.size >= max) return;
-
-      card.classList.add("selected");
-      selectedCards.add(cardId);
-
+      cards.forEach(c => {
+        if (selectedCards.has(c.id)) {
+          c.style.opacity = 1;
+          c.style.zIndex = 10;
+        } else {
+          c.style.opacity = 0.3;
+          c.style.zIndex = 1;
+        }
+      });
 
       if (selectedCards.size === max && typeof onComplete === "function") {
         onComplete(Array.from(selectedCards));
@@ -166,16 +186,16 @@ async function beforeRunReadingApi(question, ...cardIdxs) {
 
     const result = await response.json();
 
-    await sleep(1300); // 또는 추가 로딩 시간
+    await sleep(1300);
 
     hideLoading();
     showResult(result);
 
-    return true; // 성공했다는 표시
+    return true;
   } catch (error) {
     hideLoading();
     showAlert('문제가 발생했어요. 다시 시도해 주세요.');
-    return false; // 실패했다는 표시
+    return false;
   }
 }
 
@@ -208,12 +228,12 @@ function showResult(result) {
       const img = document.createElement('img');
       img.src = '/images/' + cards[j].img;
 
-      img.classList.add('card');
-      
+      img.classList.add('result-card');
+
       if (cards[j].direction === '역방향') {
         img.classList.add('reversed');
       }
-      
+
       if (tmp) {
         tmp.appendChild(img);
       }
@@ -225,7 +245,9 @@ function showResult(result) {
     }
   }
 }
-// curl
+
+
+
 async function readingApi(taroApiKey, question, selectedCards) {
   const response = await fetch('/api/reading', {
     method: 'POST',
@@ -244,6 +266,112 @@ if (alertClose) {
   });
 }
 
+
+
+function applyCardLayout() {
+  const cards = document.querySelectorAll(".card");
+  const total = cards.length;
+  const container = document.querySelector(".card-grid");
+
+  if (!container) {
+    return;
+  }
+
+  container.style.position = "relative";
+
+  const groupSize = 20;
+  const spacing = 0.5;
+  const groupCount = Math.ceil(total / groupSize);
+  const estimatedHeight = (spacing * groupSize + 2) * 1.25;
+  container.style.minHeight = estimatedHeight + 5 + "rem";
+
+  if (total <= 20) {
+    const angleStep = 40 / (total - 1);
+    cards.forEach((card, i) => {
+      const angle = -20 + i * angleStep;
+      card.style.transform = `rotate(${angle}deg) translateX(-50%)`;
+      card.style.transformOrigin = "bottom center";
+      card.style.position = "absolute";
+      card.style.left = "50%";
+      card.style.bottom = "0";
+    });
+  } else {
+    const isMobile = window.innerWidth <= 480;
+    const groupSpacing = isMobile ? 4.35 : 7;
+    const baseLeft = 0;
+
+    const groupWidthRem = groupSpacing;
+    const groupWidthPx = groupWidthRem * 16;
+    const totalStackWidthPx = groupCount * groupWidthPx;
+    const containerWidth = container.clientWidth;
+    const offsetX = containerWidth / 2 - totalStackWidthPx / 2;
+
+    cards.forEach((card, i) => {
+      const group = Math.floor(i / groupSize);
+      const offset = i % groupSize;
+      const leftPx = group * groupWidthPx + offsetX;
+      card.style.position = "absolute";
+      card.style.left = `${leftPx}px`;
+      card.style.top = `${offset * spacing}rem`;
+      card.style.transform = "translateX(0)";
+      card.style.zIndex = offset;
+    });
+  }
+}
+
+function shuffleCardsAnimation() {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card, i) => {
+    const angle = Math.random() * 30 - 15;
+    const offsetX = (Math.random() * 2.5 - 1) + "rem";
+    const offsetY = (Math.random() * 1.25 - 0.625) + "rem";
+
+    card.style.transition = "transform 0.4s ease, opacity 0.4s ease";
+    card.style.transform = `translate(${offsetX}, ${offsetY}) rotate(${angle}deg)`;
+    card.style.opacity = "0.6";
+
+    setTimeout(() => {
+      card.style.opacity = "1";
+    }, 400 + i * 10);
+  });
+
+  setTimeout(() => {
+    applyCardLayout();
+    window.scrollTo(0, 0);
+  }, 1000);
+}
+
+
+function setupCardClickEffect(max = 3, onComplete) {
+  const cards = document.querySelectorAll(".card");
+  const selected = new Set();
+
+  cards.forEach(card => {
+    card.addEventListener("click", () => {
+      const id = card.id;
+      if (!id || selected.has(id)) {
+        return;
+      }
+      if (selected.size >= max) {
+        return;
+      }
+
+      selected.add(id);
+      card.classList.add("selected");
+      card.style.transform += " translateY(-1.25rem) scale(1.2)";
+      card.style.zIndex = 100;
+
+      cards.forEach(c => {
+        if (!selected.has(c.id)) c.style.opacity = 0.3;
+      });
+
+      if (selected.size === max && typeof onComplete === "function") {
+        onComplete(Array.from(selected));
+      }
+    });
+  });
+}
+
 export default {
   beforeRunReadingApi,
   mkCard,
@@ -256,5 +384,8 @@ export default {
   setupCardSelection,
   resetCards,
   readingApi,
-  delImgs
+  delImgs,
+  shuffleCardsAnimation,
+  applyCardLayout,
+  setupCardClickEffect
 };

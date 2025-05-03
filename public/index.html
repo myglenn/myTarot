@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TAROT AI</title>
   <link rel="stylesheet" href="css/main.css" />
   <script src="js/main.js" type="module"></script>
@@ -15,22 +15,22 @@
   <!-- loading -->
   <div id="loadingView">
     <div id="loadingBackground"></div>
-      <div id="loadingContent">
-        <div class="tarot-loading">
-          <div class="tarot-card-group">
-            <svg class="tarot-card card1" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-            </svg>
-            <svg class="tarot-card card2" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-            </svg>
-            <svg class="tarot-card card3" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="150" rx="12" ry="12" class="card-bg" />
-            </svg>
-          </div>
-          <p>카드 해석 중입니다...</p>
+    <div id="loadingContent">
+      <div class="tarot-loading">
+        <div class="loading-card-group">
+          <svg class="loading-card card1" viewBox="0 0 100 150">
+            <rect width="100" height="150" rx="12" ry="12" class="loading-bg" />
+          </svg>
+          <svg class="loading-card card2" viewBox="0 0 100 150">
+            <rect width="100" height="150" rx="12" ry="12" class="loading-bg" />
+          </svg>
+          <svg class="loading-card card3" viewBox="0 0 100 150">
+            <rect width="100" height="150" rx="12" ry="12" class="loading-bg" />
+          </svg>
         </div>
+        <p>카드 해석 중입니다...</p>
       </div>
+    </div>
   </div>
 
 
@@ -56,13 +56,13 @@
         <h2>당신이 뽑은 카드</h2>
 
         <div class="tarot-card-group">
-          <div class="card tarot-card">
+          <div class="result-card tarot-card">
             <!-- <img src="/cards/1.jpg" alt="The Fool" width="100" /> -->
           </div>
-          <div class="card tarot-card">
+          <div class="result-card tarot-card">
             <!-- <img src="/cards/13_rev.jpg" alt="Death (역방향)" width="100" /> -->
           </div>
-          <div class="card tarot-card">
+          <div class="result-card tarot-card">
             <!-- <img src="/cards/9.jpg" alt="The Hermit" width="100" /> -->
           </div>
         </div>
@@ -110,12 +110,13 @@
 
         <h2>3. 외부 API 이용 안내</h2>
         <ul>
-          <li>타로 리딩 기능은 <strong>OpenAI의 GPT API</strong>를 통해 제공되며, 사용자의 질문은 OpenAI 서버로 일시 전송됩니다.</li>
-          <li><strong>데이터 학습 목적의 저장은 비활성화</strong>되어 있으며, 질문 내용은 OpenAI에 의해 모델 훈련에 사용되지 않습니다.</li>
-          <li>OpenAI는 보안 및 오남용 방지 목적으로 <strong>일시적인 로그를 유지</strong>할 수 있습니다.</li>
+          <li>타로 리딩 기능은 <strong>OpenAI의 GPT API</strong>를 통해 제공되며, 사용자의 질문은 일시적으로 OpenAI 서버에 전송됩니다.</li>
+          <li><strong>API 사용 시 입력 데이터는 모델 학습에 사용되지 않으며</strong>, OpenAI는 보안 및 오남용 방지를 위해 <strong>일시적인 로그</strong>를 유지할 수
+            있습니다.</li>
           <li>본 서비스는 <strong>입력값을 자체 서버에 저장하지 않으며</strong>, DB에는 <strong>API 사용량 및 요청 시각만 기록</strong>됩니다.</li>
-          <li>자세한 내용은 <a href="https://openai.com/policies/privacy-policy" target="_blank">OpenAI 개인정보 처리방침</a> 및 <a
-              href="https://openai.com/enterprise-privacy" target="_blank">API 데이터 사용 정책</a>을 참고하세요.</li>
+          <li>자세한 내용은 <a href="https://openai.com/policies/privacy-policy" target="_blank">OpenAI 개인정보 처리방침</a> 및
+            <a href="https://openai.com/enterprise-privacy" target="_blank">API 데이터 사용 정책</a>을 참고하세요.
+          </li>
         </ul>
 
         <h2>4. 민감한 표현 및 비속어 제한</h2>
@@ -143,7 +144,7 @@
 
         <h2>8. IP 및 로그인 정보</h2>
         <ul>
-          <li>로그인 없이 사용 가능하며, <strong>IP 및 접속 이력 저장 없음</strong>.</li>
+          <li>로그인 없이 사용 가능하며, <strong>IP 및 접속 이력 저장 없음</strong></li>
         </ul>
 
         <h2>9. 서비스 이용 한도 및 중단 안내</h2>
@@ -162,7 +163,8 @@
         </ul>
         <h2>문의</h2>
         <ul>
-          <li>본 서비스와 관련된 문의는 개발자 이메일(my_glenn@kakao.com) 또는 <a href="https://github.com/myglenn/myTarot/issues" target="_blank">GitHub 이슈</a>를 통해 전달해 주세요.</li>
+          <li>본 서비스와 관련된 문의는 개발자 이메일(my_glenn@kakao.com) 또는 <a href="https://github.com/myglenn/myTarot/issues"
+              target="_blank">GitHub 이슈</a>를 통해 전달해 주세요.</li>
         </ul>
 
       </section>
@@ -180,7 +182,7 @@
   <div id="customAlert" class="custom-alert" style="display: none;">
     <div class="alert-box">
       <p id="alertMessage">여기에 메시지가 들어갑니다</p>
-      <button id="alert-close" >확인</button>
+      <button id="alert-close">확인</button>
     </div>
   </div>
 

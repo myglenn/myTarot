@@ -2,7 +2,6 @@ import Main from './main.js';
 
 
 window.onload = function () {
-  // 1. DOM 요소들 먼저 가져오기
   const requestSection = document.getElementById("input-area");
   const selectSection = document.getElementById("card-area");
   const resultSection = document.getElementById("result-section");
@@ -12,10 +11,8 @@ window.onload = function () {
   const retryButton = document.getElementById("retry-button");
   const alertClose = document.getElementById('alert-close');
 
-  // 2. showOnlySection 함수 선언
   function showOnlySection(target, isFlex) {
     if (!target) {
-
       return;
     }
 
@@ -54,16 +51,7 @@ window.onload = function () {
     }, 400);
   }
 
-  // 3. Main 세팅
-  Main.mkCard();
-  Main.setupCardSelection({
-    max: 3,
-    onComplete: onCardSelectionComplete,
-  });
-  Main.applySystemTheme();
-
-  // 4. 버튼 이벤트 등록
-  if (requestButton) {
+  if (!!requestButton) {
     requestButton.addEventListener("click", () => {
       const question = questionInput.value.trim();
       if (!question) {
@@ -71,18 +59,18 @@ window.onload = function () {
         return;
       }
       Main.resetCards();
+      Main.delImgs();
       showOnlySection(selectSection);
+      Main.mkCard();
+      Main.shuffleCardsAnimation();
+      Main.setupCardClickEffect(3, onCardSelectionComplete);
     });
   }
 
-  if (retryButton) {
+  if (!!retryButton) {
     retryButton.addEventListener("click", () => {
       questionInput.value = "";
       Main.resetCards();
-      Main.setupCardSelection({
-        max: 3,
-        onComplete: onCardSelectionComplete,
-      });
       Main.delImgs();
       showOnlySection(requestSection, true);
       window.scrollTo(0, 0);
