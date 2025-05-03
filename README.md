@@ -1,7 +1,3 @@
-# myTarot(TAROT AI) - Project Overview
-
-A simple tarot reading service built with OpenAI API, offering gentle and insightful guidance.
-
 ## 📜 Project Overview
 This project is an AI-powered web application designed to help users gain insights into their questions through tarot card readings.  
 Beyond simple card selection, it aims to provide meaningful interpretations for a deeper experience.
